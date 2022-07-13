@@ -23,15 +23,19 @@ int main()
     if (a == 0)
         return 0;
 
-    run_commands(commands1, status, scopeSession, rmSession);
-    int readByte = readHeader(scopeSession, ioBytes, status);
-    std::vector<double> wave = readWave(scopeSession, ioBytes, status, readByte);
+    
 
     /*
     for (double i : wave)
         std::cout << i << " " << std::endl;  */
-    double rms = findRMS(wave);
-    std::cout << "RMS: " << rms << std::endl;
+    while (true) {
+        run_commands(commands1, status, scopeSession, rmSession);
+        int readByte = readHeader(scopeSession, ioBytes, status);
+        std::vector<double> wave = readWave(scopeSession, ioBytes, status, readByte);
+        double rms = findRMS(wave);
+        std::cout << "RMS: " << rms << std::endl;
+        Sleep(500);
+    }
     //Close the session to the resource
     viClose(scopeSession);
     viClose(rmSession);

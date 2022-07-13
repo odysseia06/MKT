@@ -16,7 +16,7 @@ ViChar buffer[1024];
 
 std::vector<std::string> commands1 = {":WAV:SOUR CHAN1", ":WAV:MODE NORM", ":WAV:FORM ASC", ":WAV:DATA?"};
 std::vector<std::string> commands2 = { ":AUT", ":STOP", ":WAV:SOUR CHAN1", ":WAV:MODE RAW", ":WAV:FORM BYTE", ":WAV:STAR1", ":WAV:STOP 120000", ":WAV:DATA?"};
-
+//commit deneme
 int main()
 {
     int a = init(status, rmSession, scopeSession, resourceList, numResources, ioBytes);

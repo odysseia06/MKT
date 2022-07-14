@@ -149,12 +149,14 @@
   <ItemGroup>
     <ClCompile Include="Calculations.cpp" />
     <ClCompile Include="Commands.cpp" />
+    <ClCompile Include="Configure.cpp" />
     <ClCompile Include="Initialize.cpp" />
     <ClCompile Include="MKT.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Calculations.h" />
     <ClInclude Include="Commands.h" />
+    <ClInclude Include="Configure.h" />
     <ClInclude Include="Initialize.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

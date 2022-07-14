@@ -37,6 +37,6 @@ int init(ViStatus& status, ViSession& rmSession, ViSession& scopeSession, ViFind
         std::cout << buffer << std::endl;
         return 0;
     }
-    viSetAttribute(scopeSession, VI_ATTR_TMO_VALUE, 50000);
+    viSetAttribute(scopeSession, VI_ATTR_TMO_VALUE, 5000);
     return 1;
 }

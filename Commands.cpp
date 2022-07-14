@@ -59,3 +59,4 @@ std::vector<double> readWave(ViSession& scopeSession, ViUInt32& ioBytes, ViStatu
     delete[] readWaveAsc;
     return wave;
 }
+

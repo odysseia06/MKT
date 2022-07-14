@@ -27,6 +27,9 @@
     <ClCompile Include="Calculations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Configure.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Initialize.h">
@@ -36,6 +39,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Calculations.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Configure.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

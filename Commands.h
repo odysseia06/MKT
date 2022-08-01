@@ -3,12 +3,18 @@
 #include <vector>
 #include <string.h>
 #include "VISA/Win64/Include/visa.h"
+#include "Windows.h"
+#include <algorithm>
+
 
 void print_commands(std::vector<std::string>& commands);
 void run_commands(std::vector<std::string>& commands, ViStatus& status, ViSession& scopeSession, ViSession& rmSession);
 int readHeader(ViSession& scopeSession, ViUInt32& ioBytes, ViStatus& status);
 std::vector<double> readWave(ViSession& scopeSession, ViUInt32& ioBytes, ViStatus& status, int readByte);
-
+void replace(double& i);
+double dutyCycle(ViSession& rmSession, ViSession& scopeSession, ViUInt32& ioBytes, ViStatus& status,
+	std::vector<std::string> commands);
+void readTest(ViSession& scopeSession, ViUInt32& ioBytes, ViStatus& status);
 struct Trigger {
 	char mode[16];
 	char coupling[16];

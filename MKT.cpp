@@ -20,7 +20,10 @@ Channel defaultChan2;
 Timebase defaultTim;
 
 std::vector<std::string> commands1 = {":WAV:SOUR CHAN1", ":WAV:MODE NORM", ":WAV:FORM ASC", ":WAV:DATA?"};
-std::vector<std::string> commands2 = { ":AUT", ":STOP", ":WAV:SOUR CHAN1", ":WAV:MODE RAW", ":WAV:FORM BYTE", ":WAV:STAR1", ":WAV:STOP 120000", ":WAV:DATA?"};
+std::vector<std::string> commands2 = { ":AUT", ":STOP", ":WAV:SOUR CHAN1", ":WAV:MODE RAW",
+":WAV:FORM BYTE", ":WAV:STAR1", ":WAV:STOP 120000", ":WAV:DATA?"};
+std::vector<std::string> commands3 = { ":STOP", ":WAV:SOUR CHAN1", ":WAV:FORM RAW", ":WAV:FORM BYTE",
+":WAV:STAR 1", ":WAV:STOP 120000", ":WAV:DATA?"};
 //commit deneme
 int main()
 {
@@ -45,11 +48,25 @@ int main()
     } 
     status = viWrite(scopeSession, (ViConstBuf)":TIM:MAIN:OFFS 0", (ViUInt32)strlen(":TIM:MAIN:OFFS 0"),
         VI_NULL);
-    Sleep(200); */
+    Sleep(200); 
     
     defaultConfig(defaultTrig, defaultChan1, defaultChan2, defaultTim, scopeSession, ioBytes, status);
-    //Close the session to the resource
+    int counter = 0;
+    while (counter < 10) {
+        double b = dutyCycle(rmSession, scopeSession, ioBytes, status, commands1);
+        std::cout << b << std::endl;
+        counter++;
+    }
+    
 
+
+    */
+    run_commands(commands3, status, scopeSession, rmSession);
+    readTest(scopeSession, ioBytes, status);
+
+
+
+    //Close the session to the resource
     viClose(scopeSession);
     viClose(rmSession);
     return 0;

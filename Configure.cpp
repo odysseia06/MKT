@@ -69,4 +69,5 @@ void defaultConfig(struct Trigger trig, struct Channel chan1, struct Channel cha
 		}
 		Sleep(200);
 	}
+	Sleep(1000);
 }

@@ -4,6 +4,9 @@
 #include <vector>
 #include <string.h>
 #include "VISA/Win64/Include/visa.h"
+#include "Windows.h"
+#include <algorithm>
+#include <iomanip>
 #define CMD_SIZE 64
 
 void print_commands(std::vector<std::string>& commands)
@@ -42,6 +45,20 @@ int readHeader(ViSession& scopeSession, ViUInt32& ioBytes, ViStatus& status)
     
 }   
 
+void readTest(ViSession& scopeSession, ViUInt32& ioBytes, ViStatus& status)
+{
+    static char readByte[700];
+    status = viRead(scopeSession, (ViPBuf)readByte, (ViUInt32)120011, &ioBytes);
+    std::stringstream ss;
+    ss << std::hex;
+    for (int i = 10; i < 700; i++) {
+        //ss << std::setw(2) << std::setfill('0') << (int)readByte[i] << ",";
+        std::cout << (int)readByte[i] << std::endl;
+    }
+    //std::cout << ss.str()  << std::endl;
+    
+}
+
 std::vector<double> readWave(ViSession& scopeSession, ViUInt32& ioBytes, ViStatus& status, int readByte)
 {
     char* readWaveAsc = new char[readByte];
@@ -60,3 +77,41 @@ std::vector<double> readWave(ViSession& scopeSession, ViUInt32& ioBytes, ViStatu
     return wave;
 }
 
+void replace(double& i)
+{
+    if (i == 200.0)
+        i = 0;
+    if (i == -200.0)
+        i = 0;
+}
+
+double dutyCycle(ViSession& rmSession, ViSession& scopeSession, ViUInt32& ioBytes, ViStatus& status,
+    std::vector<std::string> commands)
+{
+    status = viWrite(scopeSession, (ViConstBuf)":TIM:MAIN:SCAL 0.05", 
+        (ViUInt32)strlen(":TIM:MAIN:SCAL 0.05"), VI_NULL);
+    //Sleep(100);
+    run_commands(commands, status, scopeSession, rmSession);
+    int readByte = readHeader(scopeSession, ioBytes, status);
+    std::vector<double> wave = readWave(scopeSession, ioBytes, status, readByte);
+    std::for_each(wave.begin(), wave.end(), replace);
+    /*
+    double pulseCount = 0;
+    double spaceCount = 0;
+    double dutycycle;
+    for (double i : wave) {
+
+        if (i == 0.0) {
+            spaceCount++;
+        }
+        else {
+            pulseCount++;
+        }
+        //std::cout << i << " " << std::endl;
+    }*/
+    double target = 0;
+    double count = std::count(wave.begin(), wave.end(), target);
+    double dutycycle = (wave.size() - count) / (wave.size());
+    //Sleep(100);
+    return dutycycle;
+}

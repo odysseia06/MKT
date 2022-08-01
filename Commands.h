@@ -15,6 +15,12 @@ void replace(double& i);
 double dutyCycle(ViSession& rmSession, ViSession& scopeSession, ViUInt32& ioBytes, ViStatus& status,
 	std::vector<std::string> commands);
 void readTest(ViSession& scopeSession, ViUInt32& ioBytes, ViStatus& status);
+void showPower(ViSession& rmSession, ViSession& scopeSession, ViUInt32& ioBytes, ViStatus& status,
+	std::vector<std::string> voltageCommands, std::vector<std::string> currentCommands);
+void askPreamble(ViStatus& status, ViSession& scopeSession, ViSession& rmSession, ViUInt32& ioBytes);
+int measurePoint(double& tscal);
+void experimentMain(ViStatus& status, ViSession& scopeSession, ViSession& rmSession, ViUInt32& ioBytes);
+
 struct Trigger {
 	char mode[16];
 	char coupling[16];

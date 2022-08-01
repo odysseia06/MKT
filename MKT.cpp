@@ -20,8 +20,7 @@ Channel defaultChan2;
 Timebase defaultTim;
 
 std::vector<std::string> commands1 = {":WAV:SOUR CHAN1", ":WAV:MODE NORM", ":WAV:FORM ASC", ":WAV:DATA?"};
-std::vector<std::string> commands2 = { ":AUT", ":STOP", ":WAV:SOUR CHAN1", ":WAV:MODE RAW",
-":WAV:FORM BYTE", ":WAV:STAR1", ":WAV:STOP 120000", ":WAV:DATA?"};
+std::vector<std::string> commands2 = { ":WAV:SOUR CHAN2", ":WAV:MODE NORM", ":WAV:FORM ASC", ":WAV:DATA?" };
 std::vector<std::string> commands3 = { ":STOP", ":WAV:SOUR CHAN1", ":WAV:FORM RAW", ":WAV:FORM BYTE",
 ":WAV:STAR 1", ":WAV:STOP 120000", ":WAV:DATA?"};
 //commit deneme
@@ -31,38 +30,25 @@ int main()
     if (a == 0)
         return 0;
 
+    //askPreamble(status, scopeSession, rmSession, ioBytes);
+    double tscal = 0.000005;
+    int b = measurePoint(tscal);
+    std::cout << b << std::endl;
     
-    /*
-    int counter = 0;
-    while (counter < 10) {
-        run_commands(commands1, status, scopeSession, rmSession);
-        int readByte = readHeader(scopeSession, ioBytes, status);
-        std::vector<double> wave = readWave(scopeSession, ioBytes, status, readByte);
-        
-        for (double i : wave)
-            std::cout << i << " " << std::endl;
-        double rms = findRMS(wave);
-        std::cout << "RMS: " << rms << std::endl;
-        Sleep(500);
-        counter++;
-    } 
-    status = viWrite(scopeSession, (ViConstBuf)":TIM:MAIN:OFFS 0", (ViUInt32)strlen(":TIM:MAIN:OFFS 0"),
-        VI_NULL);
-    Sleep(200); 
+    //defaultConfig(defaultTrig, defaultChan1, defaultChan2, defaultTim, scopeSession, ioBytes, status);
+
+
+
+
     
-    defaultConfig(defaultTrig, defaultChan1, defaultChan2, defaultTim, scopeSession, ioBytes, status);
-    int counter = 0;
-    while (counter < 10) {
-        double b = dutyCycle(rmSession, scopeSession, ioBytes, status, commands1);
-        std::cout << b << std::endl;
-        counter++;
-    }
+    //double dutyc = dutyCycle(rmSession, scopeSession, ioBytes, status, commands1);
+    //std::cout << "Dutycycle is: " << (double)dutyc * 100 << "%" << std::endl;
+    //Sleep(1000);
+    //showPower(rmSession, scopeSession, ioBytes, status, commands1, commands2);
+    //defaultConfig(defaultTrig, defaultChan1, defaultChan2, defaultTim, scopeSession, ioBytes, status);
     
 
 
-    */
-    run_commands(commands3, status, scopeSession, rmSession);
-    readTest(scopeSession, ioBytes, status);
 
 
 

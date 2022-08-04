@@ -5,7 +5,7 @@
 #include "VISA/Win64/Include/visa.h"
 #include "Windows.h"
 #include <algorithm>
-
+#include <functional>
 
 void print_commands(std::vector<std::string>& commands);
 void run_commands(std::vector<std::string>& commands, ViStatus& status, ViSession& scopeSession, ViSession& rmSession);
@@ -19,7 +19,12 @@ void showPower(ViSession& rmSession, ViSession& scopeSession, ViUInt32& ioBytes,
 	std::vector<std::string> voltageCommands, std::vector<std::string> currentCommands);
 void askPreamble(ViStatus& status, ViSession& scopeSession, ViSession& rmSession, ViUInt32& ioBytes);
 int measurePoint(double& tscal);
-void experimentMain(ViStatus& status, ViSession& scopeSession, ViSession& rmSession, ViUInt32& ioBytes);
+struct waves { std::vector<double> voltage; std::vector<double> current; };
+waves experimentMain1(ViStatus& status, ViSession& scopeSession, ViSession& rmSession, ViUInt32& ioBytes,
+	std::vector<std::string> voltageCommands, std::vector<std::string> currentCommands);
+std::vector<double> timeAxis();
+
+
 
 struct Trigger {
 	char mode[16];

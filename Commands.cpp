@@ -9,10 +9,12 @@
 #include <algorithm>
 #include <iomanip>
 #include <numeric>
+#include <functional>
 #define CMD_SIZE 64
 #define FREQ 100000
 #define TSCAL 0.000005
 double tscal_inc[] = { 0.000005, 0.00001, 0.00002, 0.00005, 0.0001 };
+
 void print_commands(std::vector<std::string>& commands)
 {
 
@@ -75,9 +77,14 @@ std::vector<double> readWave(ViSession& scopeSession, ViUInt32& ioBytes, ViStatu
     {
         std::string substr;
         std::getline(ss, substr, ',');
-
-        double subdb = std::stod(substr);
-        wave.push_back(subdb);
+        try {
+            double subdb = std::stod(substr);
+            wave.push_back(subdb);
+        }
+        catch (std::invalid_argument) {
+            continue;
+        }
+        
 
     }
     delete[] readWaveAsc;
@@ -176,7 +183,36 @@ int measurePoint(double& tscal)
     return totalPoint;
 }
 
-void experimentMain(ViStatus& status, ViSession& scopeSession, ViSession& rmSession, ViUInt32& ioBytes)
+std::vector<double> timeAxis()
 {
+    std::vector<double> x_axis;
+    for (int i = 0; i < 600; i++)
+    {
+        x_axis.push_back((double)i * ((double)TSCAL / 50));
+    }
+    return x_axis;
+}
 
+waves experimentMain1(ViStatus& status, ViSession& scopeSession, ViSession& rmSession, ViUInt32& ioBytes,
+    std::vector<std::string> voltageCommands, std::vector<std::string> currentCommands)
+// For 100 kHz experiments
+{
+    status = viWrite(scopeSession, (ViConstBuf)":TIM:MAIN:SCAL 0.000005",
+        (ViUInt32)strlen(":TIM:MAIN:SCAL 0.000005"), VI_NULL);
+    Sleep(500);
+    run_commands(voltageCommands, status, scopeSession, rmSession);
+    int readByteV = readHeader(scopeSession, ioBytes, status);
+    std::vector<double> voltageWave = readWave(scopeSession, ioBytes, status, readByteV);
+
+    //Sleep(100);
+
+    run_commands(currentCommands, status, scopeSession, rmSession);
+    int readByteC = readHeader(scopeSession, ioBytes, status);
+    std::vector<double> currentWave = readWave(scopeSession, ioBytes, status, readByteC);
+    std::transform(currentWave.begin(), currentWave.end(), currentWave.begin(),
+        std::bind(std::multiplies<double>(), std::placeholders::_1, 0.01));
+    //Sleep(100);
+    
+    return waves{ voltageWave, currentWave };
+    
 }
